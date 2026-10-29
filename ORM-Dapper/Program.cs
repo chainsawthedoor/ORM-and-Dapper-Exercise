@@ -1,8 +1,12 @@
-﻿using System.Data;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using MySql.Data.MySqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Drawing.Printing;
+
 //^^^^MUST HAVE USING DIRECTIVES^^^^
 
 namespace ORM_Dapper
@@ -23,10 +27,19 @@ namespace ORM_Dapper
             DapperDepartmentRepository repo = new DapperDepartmentRepository(conn);
 
             var productRepository = new DapperProductRepository(conn);
+            Console.WriteLine("What do you want to name your Product?");
+            var productName = Console.ReadLine();
+            Console.WriteLine("What do you want the price for the new product to be?");
+            var productPrice = double.Parse(Console.ReadLine());
+            Console.WriteLine("What do you want the category ID for the new product to be?");
+            var categoryID = Convert.ToInt32(Console.ReadLine());
+            
+            productRepository.CreateProduct(productName, productPrice, categoryID);
+            
             var products = productRepository.GetAllProducts();
             foreach (var product in products)
             {
-                Console.WriteLine($"ID: {product.ProductID} Name: {product.Name} Category ID: {product.CategoryID} On Sale: {product.OnSale} Stock Level: {product.StockLevel}");
+                Console.WriteLine($"ID: {product.ProductID} Name: {product.Name}");
             }
 
             #region Departments
@@ -59,6 +72,7 @@ namespace ORM_Dapper
             }
 
         }
+        
         #endregion
 
     }
